@@ -1,7 +1,7 @@
 import random
 import operator
 
-population_size = 30 
+population_size = 30
 huidige_generatie = []
 desired_Fitness_Score = 1
 generations = 100
@@ -18,9 +18,9 @@ def genetic_algoritm(huidige_generatie, max_generations, current_generation, des
 
     sort_huidige_generatie = sorted(huidige_generatie, key=operator.attrgetter('fitness_score'))
 
-    nieuwe_generatie = generateNewGeneration(sort_huidige_generatie) #selection,crossover en mutation, (+parent en randomchildren)
+    new_generation = generateNewGeneration(sort_huidige_generatie) #selection,crossover en mutation, (+parent en randomchildren)
 
-    genetic_algoritm(nieuwe_generatie, max_generations, current_generation, desired_Fitness_Score)
+    genetic_algoritm(new_generation, max_generations, current_generation, desired_Fitness_Score)
 
 
 
@@ -62,7 +62,7 @@ def select_parent(total_fitness_score, huidige_generatie):
 
 def generateNewGeneration(solution, population_size):
 
-    nieuwe_generatie = []
+    new_generation = []
     total_fitness_score = 0
     for sol in huidige_generatie:
         total_fitness_score += sol.fitness_score
@@ -72,10 +72,10 @@ def generateNewGeneration(solution, population_size):
         parent1 = select_parent(total_fitness_score, huidige_generatie)
         parent2 = select_parent(total_fitness_score, huidige_generatie)
 
-        nieuwe_generatie.Add(crossover(parent1, parent2))
+        new_generation.Add(crossover(parent1, parent2))
 
     for i in range(5):
-        nieuwe_generatie.Add(GenerateRandomSolution())
+        new_generation.Add(GenerateRandomSolution())
 
     #bereken totale fitness
     #geneer een random nummer tussen 0 en s
@@ -83,12 +83,12 @@ def generateNewGeneration(solution, population_size):
 
     #(µ + µ)-GA
 
-    nieuwe_generatie.Add(huidige_generatie)
-    sorted_nieuwe_generatie = sorted(huidige_generatie, key=operator.attrgetter('fitness_score'))
+    new_generation.Add(huidige_generatie)
+    sorted_new_generation = sorted(huidige_generatie, key=operator.attrgetter('fitness_score'))
 
 
 
-    return sorted_nieuwe_generatie[0: population_size] #returnt lijst van random solutions
+    return sorted_new_generation[0: population_size] #returnt lijst van random solutions
 
 
 def calculateFitness(solution.gpv):
@@ -103,7 +103,7 @@ def crossover(p1,p2):
 
 
 
-    if randomkans == True:
+    if randomchange == True:
         solution = mutation(solution)
 
     return solution
@@ -113,8 +113,8 @@ def mutation(solution):
 
     return mutatedSolution
 
-def getRandomInt(min_waarde, max_waarde):
-    return random.randint(min_waarde,max_waarde)
+def getRandomInt(min_value, max_value):
+    return random.randint(min_value,max_value)
 
-def getRandomFloat(min_waarde, max_waarde):
-    return random.uniform(min_waarde,max_waarde)
+def getRandomFloat(min_value, max_value):
+    return random.uniform(min_value,max_value)
