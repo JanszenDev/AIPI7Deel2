@@ -1,4 +1,5 @@
 import random
+import neural_network
 
 ACTIVATION_FUNCTIONS = ['identity', 'logistic', 'tanh', 'relu']
 SOLVER = ['lbfgs', 'sgd', 'adam']
@@ -12,7 +13,7 @@ class Solution:
                 'learning_rate_init': random.random(),
                 'activation': ACTIVATION_FUNCTIONS[random.randint(0, len(ACTIVATION_FUNCTIONS) - 1)],
                 'solver': SOLVER[random.randint(0, len(SOLVER) - 1)],
-                'max_iterations': random.randint(10, 500),
+                'max_iterations': random.randint(650, 1250),
                 'random_state': random.randint(0, 100),
                 'hidden_layer_sizes': [random.randint(3, 100) for x in range(1, random.randint(2, 15))],
                 'alpha': random.random(),
@@ -26,3 +27,4 @@ class Solution:
                 'beta_2': random.random(),
                 'n_iter_no_change': random.randint(5, 20),
             }
+        fitness_score = neural_network.score(** self.genetic_pool)

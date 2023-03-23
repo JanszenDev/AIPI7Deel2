@@ -7,7 +7,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn import preprocessing
 from sklearn.datasets import load_iris
 from sklearn.metrics import classification_report, confusion_matrix
-
+import generation
 
 data_iris = load_iris()
 
@@ -32,13 +32,17 @@ scaler.fit(X_train)
 X_train = scaler.transform((X_train))
 X_test = scaler.transform((X_test))
 
-MLP = MLPClassifier(hidden_layer_sizes=(3, 100, 4), max_iter=1000)
+random_gen = generation.Solution()
 
+MLP = MLPClassifier(hidden_layer_sizes=random_gen.genetic_pool.get('hidden_layer_sizes'),
+                    max_iter=random_gen.genetic_pool.get('max_iterations'),
+                    random_state=random_gen.genetic_pool.get('random_state'),
+                    alpha=random_gen.genetic_pool.get('alpha')
+                    )
 
 MLP.fit(X_train, y_train.values.ravel())
 
 predictions = MLP.predict(X_test)
 
-
 print(confusion_matrix(y_test, predictions))
-print(classification_report(y_test,predictions))
+print(classification_report(y_test, predictions))

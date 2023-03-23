@@ -32,8 +32,9 @@ scaler.fit(X_train)
 X_train = scaler.transform((X_train))
 X_test = scaler.transform((X_test))
 
-test = generation.Solution()
-MLP = MLPClassifier(hidden_layer_sizes=(test.genetic_pool.get('hidden_layer_sizes')), max_iter=test.genetic_pool.get('max_iterations'))
+
+MLP = MLPClassifier(hidden_layer_sizes=(test.genetic_pool.get('hidden_layer_sizes')),
+                    max_iter=test.genetic_pool.get('max_iterations'))
 
 MLP.fit(X_train, y_train.values.ravel())
 

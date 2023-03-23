@@ -91,11 +91,6 @@ def generateNewGeneration(solution, population_size):
     return sorted_new_generation[0: population_size] #returnt lijst van random solutions
 
 
-def calculateFitness(solution.gpv):
-
-
-    return fitness
-
 
 
 def crossover(p1,p2):
