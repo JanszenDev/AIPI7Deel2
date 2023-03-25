@@ -1,30 +1,59 @@
-import random
-import neural_network
+from warnings import catch_warnings, simplefilter
+from numpy.random import uniform, randint, choice
+from random import randint
+from scipy.stats import norm
+from sklearn.datasets import load_iris, load_breast_cancer, fetch_olivetti_faces
+from sklearn.neural_network import MLPClassifier
 
-ACTIVATION_FUNCTIONS = ['identity', 'logistic', 'tanh', 'relu']
-SOLVER = ['lbfgs', 'sgd', 'adam']
-LEARNING_RATE = ['constant', 'invscaling', 'adaptive']
 
+# iris = load_iris()
+# X = iris.data
+# y = iris.target
+
+# breast_cancer = load_breast_cancer()
+# X = breast_cancer.data
+# y = breast_cancer.target
+
+faces = fetch_olivetti_faces()
+X = faces.data
+y = faces.target
 
 class Solution:
-    def __init__(self, genetic_pool=None):
+    def __init__(self, genetic_pool=None, fitness=True):
+        self.genetic_pool = genetic_pool
         if genetic_pool is None:
             self.genetic_pool = {
-                'learning_rate_init': random.random(),
-                'activation': ACTIVATION_FUNCTIONS[random.randint(0, len(ACTIVATION_FUNCTIONS) - 1)],
-                'solver': SOLVER[random.randint(0, len(SOLVER) - 1)],
-                'max_iterations': random.randint(650, 1250),
-                'random_state': random.randint(0, 100),
-                'hidden_layer_sizes': [random.randint(3, 100) for x in range(1, random.randint(2, 15))],
-                'alpha': random.random(),
-                'batch_size': random.randint(200, 1000),
-                'learning_rate': LEARNING_RATE[random.randint(0, len(LEARNING_RATE) - 1)],
-                'power_t': random.random(),
-                'shuffle': bool(random.randint(0, 1)),
-                'momentum': random.random(),
-                'nesterovs_momentum': bool(random.randint(0, 1)),
-                'beta_1': random.random(),
-                'beta_2': random.random(),
-                'n_iter_no_change': random.randint(5, 20),
+                'learning_rate_init': uniform(low=0.001, high=0.1),
+                'activation': choice(['identity', 'logistic', 'tanh', 'relu']),
+                'solver': choice(['lbfgs', 'sgd', 'adam']),
+                'learning_rate': choice(['constant', 'invscaling', 'adaptive']),
+                'max_iter': randint(200, 650),
+                'random_state': randint(0, 100),
+                'hidden_layer_sizes': [int(x) for x in norm.rvs(loc=15, scale=10, size=randint(2, 5))],
+                'alpha': uniform(low=0.0001, high=0.01),
+                'batch_size': randint(200, 1000),
+                'power_t': uniform(low=0.1, high=0.9),
+                'shuffle': bool(randint(0, 1)),
+                'momentum': uniform(low=0.1, high=0.9),
+                'nesterovs_momentum': bool(randint(0, 2)),
+                'beta_1': uniform(low=0.1, high=0.9),
+                'beta_2': uniform(low=0.1, high=0.9),
+                'n_iter_no_change': randint(5, 20)
             }
-        fitness_score = neural_network.score(** self.genetic_pool)
+        if fitness:
+            self.fitness_score = self.fitness_scoring()
+
+    def fitness_scoring(self):
+        with catch_warnings():
+            simplefilter("ignore")
+            try:
+                neural_network = MLPClassifier(**self.genetic_pool)
+                neural_network.fit(X, y)
+                return neural_network.score(X, y)
+            except (Exception, Warning):
+                return 0.
+
+    def create_model(self):
+        return MLPClassifier(**self.genetic_pool)
+
+
