@@ -6,7 +6,7 @@ RANDOM_GENEPOOL = [Solution(fitness=False) for x in range(1, 10)]
 
 population_size = 10
 oorspronkelijke_generatie = []
-desired_Fitness_Score = 2
+desired_Fitness_Score = 1
 current_generation = 0
 max_generations = 10
 
