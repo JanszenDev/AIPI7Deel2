@@ -4,9 +4,9 @@ from generation import Solution
 
 RANDOM_GENEPOOL = [Solution(fitness=False) for x in range(1, 10)]
 
-population_size = 15
+population_size = 10
 oorspronkelijke_generatie = []
-desired_Fitness_Score = 1
+desired_Fitness_Score = 2
 current_generation = 0
 max_generations = 10
 
@@ -16,31 +16,34 @@ def genetic_algoritm(huidige_generatie: list[Solution], max_generations, current
 
         for i in range(0, population_size):
             huidige_generatie.append(Solution())  # returnd randomkinderen met fitness
-    else:
-        if current_generation == max_generations or sorted(huidige_generatie, key=operator.attrgetter('fitness_score'), reverse=True)[
-                    0].fitness_score == desired_Fitness_Score:
 
-            print("____________________________________________________________")
-            if (current_generation == max_generations):
-                print("Max iteraties bereikt")
-            else:
-                print("Desired fitness score is behaald")
+    if current_generation == max_generations or sorted(huidige_generatie, key=operator.attrgetter('fitness_score'), reverse=True)[
+                0].fitness_score == desired_Fitness_Score:
 
-            print("Dit is het beste kind:",
-                  sorted(huidige_generatie, key=operator.attrgetter('fitness_score'), reverse=True)[0].fitness_score)
-            print("____________________________________________________________")
-            return
+        print("____________________________________________________________")
+        if (current_generation == max_generations):
+            print("Max iteraties bereikt")
+        else:
+            print("Desired fitness score is behaald")
+
+        print("De gemiddelde fitness_score van de generatie is",
+              sum(sol.fitness_score for sol in huidige_generatie) / population_size)
+        print("Dit is het beste kind:",
+              sorted(huidige_generatie, key=operator.attrgetter('fitness_score'), reverse=True)[0].fitness_score)
+        print("____________________________________________________________")
+        return
 
 
     sort_huidige_generatie = sorted(huidige_generatie, key=operator.attrgetter('fitness_score'), reverse=True)
     print("____________________________________________________________")
     print("Generatie",current_generation, "is succesvol gegenereerd")
+
+    print("De gemiddelde fitness_score van de generatie is", sum(sol.fitness_score for sol in huidige_generatie) / population_size)
     print("Beste kind deze generatie:", sort_huidige_generatie[0].fitness_score)
+    print("____________________________________________________________")
 
 
-
-    new_generation = generateNewGeneration(sort_huidige_generatie,
-                                           population_size)  # selection,crossover en mutation, (+parent en randomchildren)
+    new_generation = generateNewGeneration(sort_huidige_generatie, population_size)  # selection,crossover en mutation, (+parent en randomchildren)
 
     genetic_algoritm(new_generation, max_generations, current_generation + 1, desired_Fitness_Score)
 
