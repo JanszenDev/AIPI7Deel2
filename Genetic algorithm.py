@@ -15,7 +15,7 @@ def genetic_algoritm(huidige_generatie: list[Solution], max_generations, current
     if huidige_generatie == []:
 
         for i in range(0, population_size):
-            huidige_generatie.append(Solution())  # returnd randomkinderen met fitness
+            huidige_generatie.append(Solution())  #Generate first generation
 
     if current_generation == max_generations or sorted(huidige_generatie, key=operator.attrgetter('fitness_score'), reverse=True)[
                 0].fitness_score == desired_Fitness_Score:
@@ -43,7 +43,7 @@ def genetic_algoritm(huidige_generatie: list[Solution], max_generations, current
     print("____________________________________________________________")
 
 
-    new_generation = generateNewGeneration(sort_huidige_generatie, population_size)  # selection,crossover en mutation, (+parent en randomchildren)
+    new_generation = generateNewGeneration(sort_huidige_generatie, population_size)
 
     genetic_algoritm(new_generation, max_generations, current_generation + 1, desired_Fitness_Score)
 
@@ -93,22 +93,13 @@ def generateNewGeneration(huidige_generatie: list[Solution], population_size):
             print(child.fitness_score)
             new_generation.append(child)
 
-    # bereken totale fitness
-    # geneer een random nummer tussen 0 en s
-
     # (µ + µ)-GA
-
     new_generation.extend(huidige_generatie)
-
     sorted_new_generation = sorted(new_generation, key=operator.attrgetter('fitness_score'), reverse=True)
-
     return sorted_new_generation[0: population_size]  # returnt lijst van random solutions
 
 
 def crossover(p1: Solution, p2: Solution):
-    # voer de crossover uit
-
-    import random
 
     genetic_pool1 = p1.genetic_pool.copy()
     genetic_pool2 = p2.genetic_pool.copy()
@@ -123,7 +114,6 @@ def crossover(p1: Solution, p2: Solution):
             genetic_pool2[gene] = RANDOM_GENEPOOL[random.randint(0, len(RANDOM_GENEPOOL) - 1)].genetic_pool[gene]
 
     list_new_children = [Solution(genetic_pool1), Solution(genetic_pool2)]
-    # ("dit zijn de kindjes:", list_new_children[0].fitness_score, list_new_children[1].fitness_score)
 
     return list_new_children
 
